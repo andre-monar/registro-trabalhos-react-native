@@ -37,11 +37,13 @@ export async function createTables() {
         const queryAtividade = `CREATE TABLE IF NOT EXISTS tbAtividade
         (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            idTrabalho INTEGER,
             nome TEXT NOT NULL,
             descricao TEXT,
             horas_previstas REAL,
             horas_concluidas REAL,
-            situacao TEXT CHECK(situacao IN ('Pendente', 'Concluído', 'Cancelado'))      
+            situacao TEXT CHECK(situacao IN ('Pendente', 'Concluído', 'Cancelado')),
+            FOREIGN KEY (idTrabalho) REFERENCES tbTrabalho(id)    
         )`;
         await cx.execAsync(queryAtividade);
 
@@ -55,6 +57,7 @@ export async function createTables() {
         )`;
         await cx.execAsync(queryAtividadeAluno);
 
+        
         const queryTrabalhoAluno = `CREATE TABLE IF NOT EXISTS tbTrabalhoAluno
         (
             idTrabalho INTEGER,

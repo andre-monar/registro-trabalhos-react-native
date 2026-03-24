@@ -7,6 +7,7 @@ import TrabalhosScreen from './screens/TrabalhosScreen.js';
 import AtividadesScreen from './screens/AtividadesScreen.js';
 import AlunosAddScreen from './screens/AlunosAddScreen.js';
 import TrabalhosAddScreen from './screens/TrabalhosAddScreen.js';
+import AtividadesAddScreen from './screens/AtividadesAddScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
         <Stack.Screen name="Atividades" component={AtividadesScreen} />
         <Stack.Screen name="AlunosAdd" component={AlunosAddScreen} />
         <Stack.Screen name="TrabalhosAdd" component={TrabalhosAddScreen} />
+        <Stack.Screen name="AtividadesAdd" component={AtividadesAddScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

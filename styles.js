@@ -180,6 +180,46 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
   },
+
+  // atividade
+  tbCabecalhoAtividade: {
+    flexDirection: 'row',
+    backgroundColor: '#f0f0f0',
+    padding: 12,
+    borderBottomWidth: 2,
+    borderBottomColor: '#007AFF',
+    minWidth: 780,
+  },
+  tbLinhaAtividade: {
+      flexDirection: 'row',
+      padding: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: '#eee',
+      minWidth: 780,
+      alignItems: 'center',
+  },
+  celulaAtividadeTrabalho: {
+      width: 55,
+      fontSize: 13,
+  },
+  celulaAtividadeNome: {
+      width: 130,
+      fontSize: 13,
+  },
+  celulaAtividadeDesc: {
+      width: 140,
+      fontSize: 13,
+      color: '#555',
+  },
+  celulaAtividadeHoras: {
+      width: 65,
+      fontSize: 12,
+  },
+  celulaAtividadeSituacao: {
+      width: 90,
+      fontSize: 12,
+  },
+
   // botões
   botaoEditar: {
     backgroundColor: '#e8f0fe',

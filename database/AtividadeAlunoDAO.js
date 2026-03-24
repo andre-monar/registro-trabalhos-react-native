@@ -19,8 +19,8 @@ class AtividadeAlunoDAO {
             const db = await getDbConnection();
             const result = await db.getAllAsync(
                 `SELECT tbAluno.* FROM tbAluno
-                 INNER JOIN tbAtividadeAluno ON tbAluno.id = tbAtividadeAluno.idAluno
-                 WHERE tbAtividadeAluno.idAtividade = ?`,
+                INNER JOIN tbAtividadeAluno ON tbAluno.id = tbAtividadeAluno.idAluno
+                WHERE tbAtividadeAluno.idAtividade = ?`,
                 idAtividade
             );
             return result || [];
@@ -29,7 +29,6 @@ class AtividadeAlunoDAO {
             return [];
         }
     }
-
     async getByAluno(idAluno) {
         try {
             const db = await getDbConnection();

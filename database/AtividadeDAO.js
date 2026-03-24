@@ -5,8 +5,8 @@ class AtividadeDAO {
         try {
             const db = await getDbConnection();
             return await db.runAsync(
-                'INSERT INTO tbAtividade (nome, descricao, horas_previstas, horas_concluidas, situacao) VALUES (?, ?, ?, ?, ?)',
-                atividade.nome, atividade.descricao, atividade.horas_previstas, atividade.horas_concluidas, atividade.situacao
+                'INSERT INTO tbAtividade (idTrabalho, nome, descricao, horas_previstas, horas_concluidas, situacao) VALUES (?, ?, ?, ?, ?, ?)',
+                atividade.idTrabalho, atividade.nome, atividade.descricao, atividade.horas_previstas, atividade.horas_concluidas, atividade.situacao
             );
         } catch (erro) {
             console.log('Erro insert:', erro);
@@ -39,8 +39,8 @@ class AtividadeDAO {
         try {
             const db = await getDbConnection();
             return await db.runAsync(
-                'UPDATE tbAtividade SET nome = ?, descricao = ?, horas_previstas = ?, horas_concluidas = ?, situacao = ? WHERE id = ?',
-                atividade.nome, atividade.descricao, atividade.horas_previstas, atividade.horas_concluidas, atividade.situacao, id
+                'UPDATE tbAtividade SET idTrabalho = ?, nome = ?, descricao = ?, horas_previstas = ?, horas_concluidas = ?, situacao = ? WHERE id = ?',
+                atividade.idTrabalho, atividade.nome, atividade.descricao, atividade.horas_previstas, atividade.horas_concluidas, atividade.situacao, id
             );
         } catch (erro) {
             console.log('Erro update:', erro);
