@@ -1,8 +1,16 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, ScrollView } from 'react-native';
-import styles from '../styles';
+import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
+import styles, { colors } from '../styles';
 import { useCallback, useState } from 'react';
 import TrabalhoDAO from '../database/TrabalhoDAO';
 import { useFocusEffect } from '@react-navigation/native';
+
+const getBadgeStyle = (situacao) => {
+    switch (situacao) {
+        case 'Concluído': return { badge: styles.badgeConcluido, text: styles.badgeTextConcluido };
+        case 'Cancelado': return { badge: styles.badgeCancelado, text: styles.badgeTextCancelado };
+        default: return { badge: styles.badgePendente, text: styles.badgeTextPendente };
+    }
+};
 
 export default function TrabalhosScreen({ navigation }) {
     const [trabalhos, setTrabalhos] = useState([]);
@@ -27,64 +35,60 @@ export default function TrabalhosScreen({ navigation }) {
         }
     };
 
-    const renderItem = ({ item }) => (
-        <View style={styles.tbLinhaTrabalho}>
-            <Text style={styles.celulaId}>{item.id}</Text>
-            <Text style={styles.celulaTrabalhoNome}>{item.nome}</Text>
-            <Text style={styles.celulaTrabalhoDesc}>{item.descricao}</Text>
-            <Text style={styles.celulaTrabalhoData}>{item.data_entrega}</Text>
-            <Text style={styles.celulaTrabalhoSituacao}>{item.situacao}</Text>
-            <View style={styles.celulaTrabalhoAcoes}>
-                <TouchableOpacity
-                    style={styles.botaoEditar}
-                    onPress={() => navigation.navigate('TrabalhosAdd', { trabalho: item })}
-                >
-                    <Text style={styles.textoBotaoEditar}>✏️</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.botaoDeletar}
-                    onPress={() => Alert.alert(
-                        'Confirmar',
-                        `Deletar "${item.nome}"?`,
-                        [
-                            { text: 'Cancelar', style: 'cancel' },
-                            { text: 'Deletar', style: 'destructive', onPress: () => deletarTrabalho(item.id) }
-                        ]
-                    )}
-                >
-                    <Text style={styles.textoBotaoDeletar}>🗑️</Text>
-                </TouchableOpacity>
+    const renderItem = ({ item }) => {
+        const badgeStyle = getBadgeStyle(item.situacao);
+        return (
+            <View style={styles.card}>
+                <View style={styles.cardRow}>
+                    <View style={styles.cardInfo}>
+                        <Text style={styles.cardTitle}>{item.nome}</Text>
+                        {!!item.descricao && <Text style={styles.cardSubtitle} numberOfLines={2}>{item.descricao}</Text>}
+                        {!!item.data_entrega && <Text style={styles.cardDetail}>{'\uD83D\uDCC5'} Entrega: {item.data_entrega}</Text>}
+                        <View style={[styles.badge, badgeStyle.badge]}>
+                            <Text style={[styles.badgeText, badgeStyle.text]}>{item.situacao}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.cardActions}>
+                        <TouchableOpacity
+                            style={[styles.actionBtn, styles.editBtn]}
+                            onPress={() => navigation.navigate('TrabalhosAdd', { trabalho: item })}
+                        >
+                            <Text style={styles.actionBtnText}>{'\u270F\uFE0F'}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.actionBtn, styles.deleteBtn]}
+                            onPress={() => Alert.alert(
+                                'Confirmar',
+                                `Deletar "${item.nome}"?`,
+                                [
+                                    { text: 'Cancelar', style: 'cancel' },
+                                    { text: 'Deletar', style: 'destructive', onPress: () => deletarTrabalho(item.id) }
+                                ]
+                            )}
+                        >
+                            <Text style={styles.actionBtnText}>{'\uD83D\uDDD1\uFE0F'}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-        </View>
-    );
+        );
+    };
 
     return (
         <View style={styles.container}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ width: '100%' }}>
-                <View>
-                    <View style={styles.tbCabecalhoTrabalho}>
-                        <Text style={styles.celulaId}>ID</Text>
-                        <Text style={styles.celulaTrabalhoNome}>NOME</Text>
-                        <Text style={styles.celulaTrabalhoDesc}>DESCRIÇÃO</Text>
-                        <Text style={styles.celulaTrabalhoData}>ENTREGA</Text>
-                        <Text style={styles.celulaTrabalhoSituacao}>SITUAÇÃO</Text>
-                        <Text style={styles.celulaAcoes}>AÇÕES</Text>
-                    </View>
-
-                    <FlatList
-                        data={trabalhos}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={renderItem}
-                        scrollEnabled={false}
-                    />
-                </View>
-            </ScrollView>
-
+            <FlatList
+                data={trabalhos}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderItem}
+                contentContainerStyle={styles.scrollContent}
+                ListEmptyComponent={<Text style={styles.listaVazia}>Nenhum trabalho cadastrado</Text>}
+            />
             <TouchableOpacity
-                style={styles.botao}
+                style={styles.fab}
+                activeOpacity={0.8}
                 onPress={() => navigation.navigate('TrabalhosAdd')}
             >
-                <Text style={styles.textoBotao}>Adicionar</Text>
+                <Text style={styles.fabText}>+</Text>
             </TouchableOpacity>
         </View>
     );

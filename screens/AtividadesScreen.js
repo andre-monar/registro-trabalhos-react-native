@@ -1,8 +1,16 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import styles from '../styles';
 import { useCallback, useState } from 'react';
 import AtividadeDAO from '../database/AtividadeDAO';
 import { useFocusEffect } from '@react-navigation/native';
+
+const getBadgeStyle = (situacao) => {
+    switch (situacao) {
+        case 'Concluído': return { badge: styles.badgeConcluido, text: styles.badgeTextConcluido };
+        case 'Cancelado': return { badge: styles.badgeCancelado, text: styles.badgeTextCancelado };
+        default: return { badge: styles.badgePendente, text: styles.badgeTextPendente };
+    }
+};
 
 export default function AtividadesScreen({ navigation }) {
     const [atividades, setAtividades] = useState([]);
@@ -27,68 +35,60 @@ export default function AtividadesScreen({ navigation }) {
         }
     };
 
-    const renderItem = ({ item }) => (
-        <View style={styles.tbLinhaAtividade}>
-            <Text style={styles.celulaId}>{item.id}</Text>
-            <Text style={styles.celulaAtividadeTrabalho}>{item.idTrabalho}</Text>
-            <Text style={styles.celulaAtividadeNome}>{item.nome}</Text>
-            <Text style={styles.celulaAtividadeDesc}>{item.descricao}</Text>
-            <Text style={styles.celulaAtividadeHoras}>{item.horas_previstas}h</Text>
-            <Text style={styles.celulaAtividadeHoras}>{item.horas_concluidas}h</Text>
-            <Text style={styles.celulaAtividadeSituacao}>{item.situacao}</Text>
-            <View style={styles.celulaTrabalhoAcoes}>
-                <TouchableOpacity
-                    style={styles.botaoEditar}
-                    onPress={() => navigation.navigate('AtividadesAdd', { atividade: item })}
-                >
-                    <Text style={styles.textoBotaoEditar}>✏️</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.botaoDeletar}
-                    onPress={() => Alert.alert(
-                        'Confirmar',
-                        `Deletar "${item.nome}"?`,
-                        [
-                            { text: 'Cancelar', style: 'cancel' },
-                            { text: 'Deletar', style: 'destructive', onPress: () => deletarAtividade(item.id) }
-                        ]
-                    )}
-                >
-                    <Text style={styles.textoBotaoDeletar}>🗑️</Text>
-                </TouchableOpacity>
+    const renderItem = ({ item }) => {
+        const badgeStyle = getBadgeStyle(item.situacao);
+        return (
+            <View style={styles.card}>
+                <View style={styles.cardRow}>
+                    <View style={styles.cardInfo}>
+                        <Text style={styles.cardTitle}>{item.nome}</Text>
+                        {!!item.descricao && <Text style={styles.cardSubtitle} numberOfLines={2}>{item.descricao}</Text>}
+                        <Text style={styles.cardDetail}>Trabalho #{item.idTrabalho}  {'\u2022'}  {item.horas_previstas}h prev. / {item.horas_concluidas}h concl.</Text>
+                        <View style={[styles.badge, badgeStyle.badge]}>
+                            <Text style={[styles.badgeText, badgeStyle.text]}>{item.situacao}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.cardActions}>
+                        <TouchableOpacity
+                            style={[styles.actionBtn, styles.editBtn]}
+                            onPress={() => navigation.navigate('AtividadesAdd', { atividade: item })}
+                        >
+                            <Text style={styles.actionBtnText}>{'\u270F\uFE0F'}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.actionBtn, styles.deleteBtn]}
+                            onPress={() => Alert.alert(
+                                'Confirmar',
+                                `Deletar "${item.nome}"?`,
+                                [
+                                    { text: 'Cancelar', style: 'cancel' },
+                                    { text: 'Deletar', style: 'destructive', onPress: () => deletarAtividade(item.id) }
+                                ]
+                            )}
+                        >
+                            <Text style={styles.actionBtnText}>{'\uD83D\uDDD1\uFE0F'}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-        </View>
-    );
+        );
+    };
 
     return (
         <View style={styles.container}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ width: '100%' }}>
-                <View>
-                    <View style={styles.tbCabecalhoAtividade}>
-                        <Text style={styles.celulaId}>ID</Text>
-                        <Text style={styles.celulaAtividadeTrabalho}>TRAB.</Text>
-                        <Text style={styles.celulaAtividadeNome}>NOME</Text>
-                        <Text style={styles.celulaAtividadeDesc}>DESCRIÇÃO</Text>
-                        <Text style={styles.celulaAtividadeHoras}>H.PREV</Text>
-                        <Text style={styles.celulaAtividadeHoras}>H.CONC</Text>
-                        <Text style={styles.celulaAtividadeSituacao}>SITUAÇÃO</Text>
-                        <Text style={styles.celulaTrabalhoAcoes}>AÇÕES</Text>
-                    </View>
-
-                    <FlatList
-                        data={atividades}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={renderItem}
-                        scrollEnabled={false}
-                    />
-                </View>
-            </ScrollView>
-
+            <FlatList
+                data={atividades}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderItem}
+                contentContainerStyle={styles.scrollContent}
+                ListEmptyComponent={<Text style={styles.listaVazia}>Nenhuma atividade cadastrada</Text>}
+            />
             <TouchableOpacity
-                style={styles.botao}
+                style={styles.fab}
+                activeOpacity={0.8}
                 onPress={() => navigation.navigate('AtividadesAdd')}
             >
-                <Text style={styles.textoBotao}>Adicionar</Text>
+                <Text style={styles.fabText}>+</Text>
             </TouchableOpacity>
         </View>
     );

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Alert, FlatList, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, FlatList, Modal, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../styles';
 import { useState } from 'react';
@@ -19,13 +19,11 @@ export default function AtividadesAddScreen({ navigation, route }) {
     const [trabalhos, setTrabalhos] = useState([]);
     const [idTrabalho, setIdTrabalho] = useState(editando ? atividadeEditar.idTrabalho : null);
 
-    // estados da seção de alunos
     const [alunosVinculados, setAlunosVinculados] = useState([]);
     const [modalVisivel, setModalVisivel] = useState(false);
     const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
     const [alunoSelecionado, setAlunoSelecionado] = useState(null);
 
-    // carrega trabalhos pro picker e alunos vinculados se editando
     useState(() => {
         const carregar = async () => {
             const lista = await TrabalhoDAO.getAll();
@@ -42,9 +40,7 @@ export default function AtividadesAddScreen({ navigation, route }) {
     };
 
     const abrirModal = async () => {
-        // busca alunos do trabalho relacionado
         const alunosDoTrabalho = await TrabalhoAlunoDAO.getByTrabalho(idTrabalho);
-        // filtra os que já estão vinculados à atividade
         const vinculadosIds = alunosVinculados.map(a => a.id);
         const disponiveis = alunosDoTrabalho.filter(a => !vinculadosIds.includes(a.id));
 
@@ -110,32 +106,31 @@ export default function AtividadesAddScreen({ navigation, route }) {
         }
     };
 
-    const renderAluno = ({ item }) => (
-        <View style={[styles.tbLinha, { alignItems: 'center' }]}>
-            <Text style={styles.celulaId}>{item.id}</Text>
-            <Text style={styles.celulaNome}>{item.nome}</Text>
-            <Text style={styles.celulaRa}>{item.ra}</Text>
-            <View style={styles.celulaAcoes}>
-                <TouchableOpacity
-                    style={styles.botaoDeletar}
-                    onPress={() => Alert.alert(
-                        'Confirmar',
-                        `Remover "${item.nome}" desta atividade?`,
-                        [
-                            { text: 'Cancelar', style: 'cancel' },
-                            { text: 'Remover', style: 'destructive', onPress: () => removerAluno(item.id) }
-                        ]
-                    )}
-                >
-                    <Text style={styles.textoBotaoDeletar}>🗑️</Text>
-                </TouchableOpacity>
+    const renderAlunoVinculado = ({ item }) => (
+        <View style={styles.alunoChip}>
+            <View style={styles.alunoChipInfo}>
+                <Text style={styles.alunoChipNome}>{item.nome}</Text>
+                <Text style={styles.alunoChipRa}>RA: {item.ra}</Text>
             </View>
+            <TouchableOpacity
+                style={styles.alunoChipDelete}
+                onPress={() => Alert.alert(
+                    'Confirmar',
+                    `Remover "${item.nome}" desta atividade?`,
+                    [
+                        { text: 'Cancelar', style: 'cancel' },
+                        { text: 'Remover', style: 'destructive', onPress: () => removerAluno(item.id) }
+                    ]
+                )}
+            >
+                <Text style={{ fontSize: 14 }}>{'\uD83D\uDDD1\uFE0F'}</Text>
+            </TouchableOpacity>
         </View>
     );
 
     return (
-        <View style={styles.container}>
-            {/* picker de trabalho */}
+        <ScrollView style={styles.screenPadding} keyboardShouldPersistTaps="handled">
+            <Text style={styles.inputLabel}>Trabalho *</Text>
             <View style={styles.picker}>
                 <Picker
                     selectedValue={idTrabalho}
@@ -147,37 +142,46 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 </Picker>
             </View>
 
+            <Text style={styles.inputLabel}>Nome *</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Nome da atividade"
+                placeholderTextColor="#94A3B8"
                 value={nome}
                 onChangeText={setNome}
             />
 
+            <Text style={styles.inputLabel}>Descrição</Text>
             <TextInput
-                style={styles.input}
-                placeholder="Descrição"
+                style={[styles.input, { minHeight: 80, textAlignVertical: 'top' }]}
+                placeholder="Descrição da atividade"
+                placeholderTextColor="#94A3B8"
                 value={descricao}
                 onChangeText={setDescricao}
+                multiline
             />
 
+            <Text style={styles.inputLabel}>Horas Previstas</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Horas previstas"
+                placeholder="Ex: 10"
+                placeholderTextColor="#94A3B8"
                 value={horasPrevistas}
                 onChangeText={setHorasPrevistas}
-                keyboardType='numeric'
+                keyboardType="numeric"
             />
 
+            <Text style={styles.inputLabel}>Horas Concluídas</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Horas concluídas"
+                placeholder="Ex: 5"
+                placeholderTextColor="#94A3B8"
                 value={horasConcluidas}
                 onChangeText={setHorasConcluidas}
-                keyboardType='numeric'
+                keyboardType="numeric"
             />
 
-            {/* picker de situação */}
+            <Text style={styles.inputLabel}>Situação</Text>
             <View style={styles.picker}>
                 <Picker selectedValue={situacao} onValueChange={(value) => setSituacao(value)}>
                     <Picker.Item label="Pendente" value="Pendente" />
@@ -186,37 +190,28 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 </Picker>
             </View>
 
-            {/* seção de alunos — só no modo edição */}
             {editando && (
                 <View style={styles.secaoAlunos}>
-                    <View style={styles.tbCabecalho}>
-                        <Text style={styles.celulaId}>ID</Text>
-                        <Text style={styles.celulaNome}>NOME</Text>
-                        <Text style={styles.celulaRa}>RA</Text>
-                        <Text style={styles.celulaAcoes}>AÇÕES</Text>
-                    </View>
-
+                    <Text style={styles.secaoTitulo}>Alunos Vinculados</Text>
                     <FlatList
                         data={alunosVinculados}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={renderAluno}
+                        renderItem={renderAlunoVinculado}
                         scrollEnabled={false}
                         ListEmptyComponent={
                             <Text style={styles.listaVazia}>Nenhum aluno vinculado</Text>
                         }
                     />
-
                     <TouchableOpacity style={styles.botao} onPress={abrirModal}>
                         <Text style={styles.textoBotao}>Adicionar Aluno</Text>
                     </TouchableOpacity>
                 </View>
             )}
 
-            <TouchableOpacity style={styles.botao} onPress={salvarAtividade}>
-                <Text style={styles.textoBotao}>{editando ? 'Atualizar' : 'Salvar'}</Text>
+            <TouchableOpacity style={[styles.botao, { marginBottom: 40 }]} onPress={salvarAtividade}>
+                <Text style={styles.textoBotao}>{editando ? 'Atualizar' : 'Cadastrar'}</Text>
             </TouchableOpacity>
 
-            {/* modal picker de alunos */}
             <Modal visible={modalVisivel} transparent animationType="fade">
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalBox}>
@@ -245,6 +240,6 @@ export default function AtividadesAddScreen({ navigation, route }) {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </ScrollView>
     );
 }

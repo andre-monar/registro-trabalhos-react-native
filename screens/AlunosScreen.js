@@ -28,55 +28,52 @@ export default function AlunosScreen({ navigation }) {
     };
 
     const renderItem = ({ item }) => (
-        <View style={styles.tbLinha}>
-            <Text style={styles.celulaId}>{item.id}</Text>
-            <Text style={styles.celulaNome}>{item.nome}</Text>
-            <Text style={styles.celulaRa}>{item.ra}</Text>
-            <View style={styles.celulaAcoes}>
-            <TouchableOpacity 
-                style={styles.botaoEditar}
-                onPress={() => navigation.navigate('AlunosAdd', { aluno: item })}
-            >
-                <Text style={styles.textoBotaoEditar}>✏️</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.botaoDeletar}
-                onPress={() => Alert.alert(
-                    'Confirmar',
-                    `Deletar "${item.nome}"?`,
-                    [
-                        { text: 'Cancelar', style: 'cancel' },
-                        { text: 'Deletar', style: 'destructive', onPress: () => deletarAluno(item.id) }
-                    ]
-                )}
-            >
-                <Text style={styles.textoBotaoDeletar}>🗑️</Text>
-            </TouchableOpacity>
-        </View>
+        <View style={styles.card}>
+            <View style={styles.cardRow}>
+                <View style={styles.cardInfo}>
+                    <Text style={styles.cardTitle}>{item.nome}</Text>
+                    <Text style={styles.cardSubtitle}>RA: {item.ra}</Text>
+                </View>
+                <View style={styles.cardActions}>
+                    <TouchableOpacity
+                        style={[styles.actionBtn, styles.editBtn]}
+                        onPress={() => navigation.navigate('AlunosAdd', { aluno: item })}
+                    >
+                        <Text style={styles.actionBtnText}>{'\u270F\uFE0F'}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.actionBtn, styles.deleteBtn]}
+                        onPress={() => Alert.alert(
+                            'Confirmar',
+                            `Deletar "${item.nome}"?`,
+                            [
+                                { text: 'Cancelar', style: 'cancel' },
+                                { text: 'Deletar', style: 'destructive', onPress: () => deletarAluno(item.id) }
+                            ]
+                        )}
+                    >
+                        <Text style={styles.actionBtnText}>{'\uD83D\uDDD1\uFE0F'}</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
     );
 
     return (
-        <View style = {styles.container}>
-            <View style={styles.tbCabecalho}>
-                <Text style={styles.celulaId}>ID</Text>
-                <Text style={styles.celulaNome}>NOME</Text>
-                <Text style={styles.celulaRa}>RA</Text>
-                <Text style={styles.celulaAcoes}>AÇÕES</Text>
-            </View>
-
+        <View style={styles.container}>
             <FlatList
                 data={alunos}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderItem}
-                style={styles.lista}
+                contentContainerStyle={styles.scrollContent}
+                ListEmptyComponent={<Text style={styles.listaVazia}>Nenhum aluno cadastrado</Text>}
             />
-            
             <TouchableOpacity
-                style={styles.botao}
+                style={styles.fab}
+                activeOpacity={0.8}
                 onPress={() => navigation.navigate('AlunosAdd')}
             >
-                <Text style={styles.textoBotao}>Adicionar</Text>
+                <Text style={styles.fabText}>+</Text>
             </TouchableOpacity>
         </View>
     );
