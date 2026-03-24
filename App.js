@@ -1,29 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, } from 'react-native';
-import { useEffect, useState } from 'react';
-import { createTables } from './database/Database.js';
-import styles from './styles';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import AlunosScreen from './screens/AlunosScreen.js';
+import HomeScreen from './screens/HomeScreen';
+import TrabalhosScreen from './screens/TrabalhosScreen.js';
+import AtividadesScreen from './screens/AtividadesScreen.js';
+
+const Stack = createStackNavigator();
 
 export default function App() {
-  const [status, setStatus] = useState('Aguardando...');
-
-
-  // Inicializar banco ao abrir o app
-  const setup = async () => {
-        setStatus('Criando banco...');
-        await createTables();
-        setStatus('Banco criado! ✅');
-    };
-
-    useEffect(() => {
-        setup();
-    }, []);
-
   return (
-    <View style={styles.container}>
-        <Text>{status}</Text> 
-        <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Alunos" component={AlunosScreen} />
+        <Stack.Screen name="Trabalhos" component={TrabalhosScreen} />
+        <Stack.Screen name="Atividades" component={AtividadesScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
