@@ -5,13 +5,11 @@ import { createTables } from '../database/Database.js';
 import styles from '../styles';
 
 export default function HomeScreen({ navigation }) {
-  const [status, setStatus] = useState('Aguardando...');
-
+  const [bancoPronto, setBancoPronto] = useState(false);
   // Inicializar banco ao abrir o app
   const setup = async () => {
-        setStatus('Criando banco...');
         await createTables();
-        setStatus('Banco criado! ✅');
+        setBancoPronto(true);
     };
 
     useEffect(() => {
@@ -20,29 +18,33 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-        <Text>{status}</Text> 
         <StatusBar style="auto" />
 
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => navigation.navigate('Alunos')}
-        >
-          <Text style={styles.textoBotao}>Alunos</Text>
-        </TouchableOpacity>
+        {bancoPronto && (
+          <>
+            <TouchableOpacity
+            style={styles.botao}
+            onPress={() => navigation.navigate('Alunos')}
+            >
+              <Text style={styles.textoBotao}>Alunos</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => navigation.navigate('Trabalhos')}
-        >
-          <Text style={styles.textoBotao}>Trabalhos</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate('Trabalhos')}
+            >
+              <Text style={styles.textoBotao}>Trabalhos</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => navigation.navigate('Atividades')}
-        >
-          <Text style={styles.textoBotao}>Atividades</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => navigation.navigate('Atividades')}
+            >
+              <Text style={styles.textoBotao}>Atividades</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        
     </View>
   );
 }

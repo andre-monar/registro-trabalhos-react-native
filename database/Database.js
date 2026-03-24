@@ -1,14 +1,21 @@
 import * as SQLite from 'expo-sqlite';
 
 // criar ou abrir db
+let dbInstance = null;
+
 export async function getDbConnection() {
-    return await SQLite.openDatabaseAsync('dbRegistroTrabalhos.db');
+    if (!dbInstance) {
+        dbInstance = await SQLite.openDatabaseAsync('dbRegistroTrabalhos.db');
+    }
+    return dbInstance;
 }
 
 // criar tabelas
 export async function createTables() {
-    var cx = await getDbConnection();
+    let cx = null;
     try {
+        cx = await getDbConnection();
+        
         const queryAluno = `CREATE TABLE IF NOT EXISTS tbAluno
         (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,11 +65,8 @@ export async function createTables() {
         )`;
         await cx.execAsync(queryTrabalhoAluno);
 
-        console.log("Banco aberto com sucesso!");
+        console.log("Tabelas criadas com sucesso!");
     } catch (erro) {
-        console.log("Erro ao criar banco: ", erro);
-    }
-    finally {
-        await cx.closeAsync();
-    }
-};
+        console.log("Erro ao criar tabelas: ", erro);
+    } 
+}
