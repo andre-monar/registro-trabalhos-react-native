@@ -14,6 +14,7 @@ export async function getDbConnection() {
 export async function createTables() {
     let cx = null;
     try {
+        
         cx = await getDbConnection();
         
         const queryAluno = `CREATE TABLE IF NOT EXISTS tbAluno
@@ -43,7 +44,7 @@ export async function createTables() {
             horas_previstas REAL,
             horas_concluidas REAL,
             situacao TEXT CHECK(situacao IN ('Pendente', 'Concluído', 'Cancelado')),
-            FOREIGN KEY (idTrabalho) REFERENCES tbTrabalho(id)    
+            FOREIGN KEY (idTrabalho) REFERENCES tbTrabalho(id) ON DELETE CASCADE    
         )`;
         await cx.execAsync(queryAtividade);
 
@@ -51,8 +52,8 @@ export async function createTables() {
         (
             idAtividade INTEGER,
             idAluno INTEGER,
-            FOREIGN KEY (idAtividade) REFERENCES tbAtividade(id),
-            FOREIGN KEY (idAluno) REFERENCES tbAluno(id),
+            FOREIGN KEY (idAtividade) REFERENCES tbAtividade(id) ON DELETE CASCADE,
+            FOREIGN KEY (idAluno) REFERENCES tbAluno(id) ON DELETE CASCADE,
             PRIMARY KEY (idAtividade, idAluno)   
         )`;
         await cx.execAsync(queryAtividadeAluno);
@@ -62,8 +63,8 @@ export async function createTables() {
         (
             idTrabalho INTEGER,
             idAluno INTEGER,
-            FOREIGN KEY (idTrabalho) REFERENCES tbTrabalho(id),
-            FOREIGN KEY (idAluno) REFERENCES tbAluno(id),
+            FOREIGN KEY (idTrabalho) REFERENCES tbTrabalho(id) ON DELETE CASCADE,
+            FOREIGN KEY (idAluno) REFERENCES tbAluno(id) ON DELETE CASCADE,
             PRIMARY KEY (idTrabalho, idAluno)  
         )`;
         await cx.execAsync(queryTrabalhoAluno);

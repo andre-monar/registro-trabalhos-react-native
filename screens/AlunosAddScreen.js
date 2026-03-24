@@ -16,6 +16,11 @@ export default function AlunosAddScreen( { navigation, route } ) {
             return;
         }
 
+        if(ra.length !== 9) {
+            Alert.alert('Atenção','RA deve conter 9 dígitos', [{ text: 'OK' }]);
+            return;
+        }
+
         try {
             if (editando) {
                 await AlunoDAO.update(alunoEditar.id, { nome, ra });
@@ -43,7 +48,7 @@ export default function AlunosAddScreen( { navigation, route } ) {
             <Text style={styles.texto}>RA:</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Digite o RA"
+                placeholder="Digite o RA (9 dígitos)"
                 value={ra}
                 onChangeText={(text) => {
                     const numericText = text.replace(/[^0-9]/g, '');

@@ -21,6 +21,13 @@ export default function TrabalhosAddScreen({ navigation, route }) {
     const [alunoSelecionado, setAlunoSelecionado] = useState(null);
     const [idTrabalhoAtual, setIdTrabalhoAtual] = useState(trabalhoEditar?.id || null);
 
+    const formatarData = (text) => {
+        const nums = text.replace(/[^0-9]/g, '').slice(0,8);
+        if (nums.length <= 4) return nums;
+        if (nums.length <= 6) return nums.slice(0,4) + '-' + nums.slice(4);
+        return nums.slice(0,4) + '-' + nums.slice(4,6) + '-' + nums.slice(6);
+    }
+
     // listar alunos vinculados ao trabalho
     const carregarAlunosVinculados = async (idTrabalho) => {
         const lista = await TrabalhoAlunoDAO.getByTrabalho(idTrabalho);
@@ -137,8 +144,9 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                 style={styles.input}
                 placeholder="Data de entrega (AAAA-MM-DD)"
                 value={dataEntrega}
-                onChangeText={setDataEntrega}
+                onChangeText={(t) => setDataEntrega(formatarData(t))}
                 textAlign="center"
+                keyboardType="numeric"
                 onFocus={() => setDataEntrega('')}
             />
 
