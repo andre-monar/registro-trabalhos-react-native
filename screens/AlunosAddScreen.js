@@ -36,6 +36,8 @@ export default function AlunosAddScreen( { navigation, route } ) {
                 placeholder="Digite o nome"
                 value={nome}
                 onChangeText={setNome}
+                textAlign="center"
+                onFocus={() => setNome('')}
             />
 
             <Text style={styles.texto}>RA:</Text>
@@ -49,6 +51,8 @@ export default function AlunosAddScreen( { navigation, route } ) {
                 }}
                 keyboardType='numeric'
                 maxLength={9}
+                textAlign="center"
+                onFocus={() => setRa('')}
             />
             
             <TouchableOpacity 

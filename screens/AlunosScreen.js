@@ -33,26 +33,26 @@ export default function AlunosScreen({ navigation }) {
             <Text style={styles.celulaNome}>{item.nome}</Text>
             <Text style={styles.celulaRa}>{item.ra}</Text>
             <View style={styles.celulaAcoes}>
-            <TouchableOpacity 
-                style={styles.botaoEditar}
-                onPress={() => navigation.navigate('AlunosAdd', { aluno: item })}
-            >
-                <Text style={styles.textoBotaoEditar}>✏️</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.botaoDeletar}
-                onPress={() => Alert.alert(
-                    'Confirmar',
-                    `Deletar "${item.nome}"?`,
-                    [
-                        { text: 'Cancelar', style: 'cancel' },
-                        { text: 'Deletar', style: 'destructive', onPress: () => deletarAluno(item.id) }
-                    ]
-                )}
-            >
-                <Text style={styles.textoBotaoDeletar}>🗑️</Text>
-            </TouchableOpacity>
-        </View>
+                <TouchableOpacity 
+                    style={styles.botaoEditar}
+                    onPress={() => navigation.navigate('AlunosAdd', { aluno: item })}
+                >
+                    <Text style={styles.textoBotaoEditar}>✏️</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.botaoDeletar}
+                    onPress={() => Alert.alert(
+                        'Confirmar',
+                        `Deletar "${item.nome}"?`,
+                        [
+                            { text: 'Cancelar', style: 'cancel' },
+                            { text: 'Deletar', style: 'destructive', onPress: () => deletarAluno(item.id) }
+                        ]
+                    )}
+                >
+                    <Text style={styles.textoBotaoDeletar}>🗑️</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 

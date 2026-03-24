@@ -38,6 +38,12 @@ export default function TrabalhosScreen({ navigation }) {
             <Text style={styles.celulaTrabalhoHoras}>{item.total_concluidas}h</Text>
             <View style={styles.celulaTrabalhoAcoes}>
                 <TouchableOpacity
+                    style={styles.botaoVisualizar}
+                    onPress={() => navigation.navigate('TrabalhoView', { trabalho: item })}
+                >
+                    <Text style={styles.textoBotaoVisualizar}>📊</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
                     style={styles.botaoEditar}
                     onPress={() => navigation.navigate('TrabalhosAdd', { trabalho: item })}
                 >

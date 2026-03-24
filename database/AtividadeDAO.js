@@ -1,4 +1,5 @@
 import { getDbConnection } from './Database';
+import TrabalhoDAO from './TrabalhoDAO';
 
 class AtividadeDAO {
     async insert(atividade) {
@@ -29,7 +30,7 @@ class AtividadeDAO {
             return [];
         }
     }
-    
+
     async getById(id) {
         try {
             const db = await getDbConnection();
@@ -43,10 +44,16 @@ class AtividadeDAO {
     async update(id, atividade) {
         try {
             const db = await getDbConnection();
-            return await db.runAsync(
+            const result = await db.runAsync(
                 'UPDATE tbAtividade SET idTrabalho = ?, nome = ?, descricao = ?, horas_previstas = ?, horas_concluidas = ?, situacao = ? WHERE id = ?',
-                atividade.idTrabalho, atividade.nome, atividade.descricao, atividade.horas_previstas, atividade.horas_concluidas, atividade.situacao, id
+                atividade.idTrabalho, atividade.nome, atividade.descricao, 
+                atividade.horas_previstas, atividade.horas_concluidas, atividade.situacao, id
             );
+            
+            // atualizar status do trabalho
+            await TrabalhoDAO.atualizarStatusPorHoras(atividade.idTrabalho);
+            
+            return result;
         } catch (erro) {
             console.log('Erro update:', erro);
             throw erro;
@@ -60,6 +67,20 @@ class AtividadeDAO {
         } catch (erro) {
             console.log('Erro delete:', erro);
             throw erro;
+        }
+    }
+
+    async getByTrabalho(idTrabalho) {
+        try {
+            const db = await getDbConnection();
+            const result = await db.getAllAsync(
+                'SELECT * FROM tbAtividade WHERE idTrabalho = ? ORDER BY id',
+                idTrabalho
+            );
+            return result || [];
+        } catch (erro) {
+            console.log('Erro getByTrabalho:', erro);
+            return [];
         }
     }
 }

@@ -118,6 +118,8 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                 placeholder="Nome do trabalho"
                 value={nome}
                 onChangeText={setNome}
+                textAlign="center"
+                onFocus={() => setNome('')}
             />
 
             <Text style={styles.texto}>Descrição:</Text>
@@ -126,6 +128,8 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                 placeholder="Descrição"
                 value={descricao}
                 onChangeText={setDescricao}
+                textAlign="center"
+                onFocus={() => setDescricao('')}
             />
 
             <Text style={styles.texto}>Data de entrega (AAAA-MM-DD):</Text>
@@ -134,6 +138,8 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                 placeholder="Data de entrega (AAAA-MM-DD)"
                 value={dataEntrega}
                 onChangeText={setDataEntrega}
+                textAlign="center"
+                onFocus={() => setDataEntrega('')}
             />
 
             <Text style={styles.texto}>Situação:</Text>
@@ -166,7 +172,7 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                     />
 
                     <TouchableOpacity style={styles.botao} onPress={abrirModal}>
-                        <Text style={styles.textoBotao}>Adicionar Aluno</Text>
+                        <Text style={styles.textoBotaoAdd}>Adicionar Aluno</Text>
                     </TouchableOpacity>
                 </View>
             )}

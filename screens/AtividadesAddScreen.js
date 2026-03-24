@@ -173,6 +173,8 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 placeholder="Nome da atividade"
                 value={nome}
                 onChangeText={setNome}
+                textAlign="center"
+                onFocus={() => setNome('')}
             />
 
             <Text style={styles.texto}>Descrição:</Text>
@@ -181,6 +183,8 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 placeholder="Descrição"
                 value={descricao}
                 onChangeText={setDescricao}
+                textAlign="center"
+                onFocus={() => setDescricao('')}
             />
 
             <Text style={styles.texto}>Horas previstas:</Text>
@@ -199,6 +203,8 @@ export default function AtividadesAddScreen({ navigation, route }) {
                     }
                 }}
                 keyboardType='numeric'
+                textAlign="center"
+                onFocus={() => setHorasPrevistas('')}
             />
 
             <Text style={styles.texto}>Horas concluídas:</Text>
@@ -208,14 +214,16 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 value={horasConcluidas}
                 onChangeText={handleHorasConcluidas}
                 keyboardType='numeric'
+                textAlign="center"
+                onFocus={() => setHorasConcluidas('')}
             />
 
             <Text style={styles.texto}>Situação:</Text>
             {/* picker de situação */}
             <View style={styles.picker}>
                 <Picker selectedValue={situacao} onValueChange={(value) => setSituacao(value)}>
-                    <Picker.Item label="Pendente" value="Pendente" />
-                    <Picker.Item label="Concluído" value="Concluído" />
+                    <Picker.Item textAlign="center" label="Pendente" value="Pendente" />
+                    <Picker.Item textAlign="center" label="Concluído" value="Concluído" />
                     <Picker.Item label="Cancelado" value="Cancelado" />
                 </Picker>
             </View>
@@ -242,7 +250,7 @@ export default function AtividadesAddScreen({ navigation, route }) {
                     />
 
                     <TouchableOpacity style={styles.botao} onPress={abrirModal}>
-                        <Text style={styles.textoBotao}>Adicionar Aluno</Text>
+                        <Text style={styles.textoBotaoAdd}>Adicionar Aluno</Text>
                     </TouchableOpacity>
                 </View>
             )}

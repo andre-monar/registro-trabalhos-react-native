@@ -66,6 +66,37 @@ class TrabalhoDAO {
         }
     }
 
+    async atualizarStatusPorHoras(idTrabalho) {
+        try {
+            const db = await getDbConnection();
+            
+            const result = await db.getFirstAsync(
+                `SELECT 
+                    COALESCE(SUM(horas_previstas), 0) as total_previstas,
+                    COALESCE(SUM(horas_concluidas), 0) as total_concluidas
+                FROM tbAtividade 
+                WHERE idTrabalho = ?`,
+                idTrabalho
+            );
+            
+            const { total_previstas, total_concluidas } = result;
+            
+            // Se tem horas previstas e todas foram concluídas
+            if (total_previstas > 0 && total_concluidas >= total_previstas) {
+                await db.runAsync(
+                    'UPDATE tbTrabalho SET situacao = ? WHERE id = ?',
+                    'Concluído', idTrabalho
+                );
+                return true; // Status atualizado
+            }
+            
+            return false; 
+        } catch (erro) {
+            console.log('Erro atualizarStatusPorHoras:', erro);
+            throw erro;
+        }
+    }
+
     
 }
 

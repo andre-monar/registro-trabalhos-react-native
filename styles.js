@@ -23,6 +23,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  textoBotaoAdd: {
+    color: '#007AFF',
+    fontSize: 16,
+    height: 25,
+    fontWeight: 'bold',
+    minWidth: 120,
+  },
   input: {
     width: 250,
     borderWidth: 1,
@@ -52,7 +59,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   celulaId: {
-    width: '10%',
+    width: '7%',
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -105,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   celulaTrabalhoAcoes: {
-    width: 80,
+    width: 110,
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 6,
@@ -239,6 +246,34 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  // view trabalho
+  viewHeader: {
+    padding: 16,
+    backgroundColor: '#f0f0f0',
+    borderBottomWidth: 2,
+    borderBottomColor: '#007AFF',
+    marginBottom: 8,
+  },
+  viewTitulo: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#007AFF',
+  },
+  viewSubtitulo: {
+      fontSize: 13,
+      color: '#555',
+      marginTop: 4,
+  },
+  viewSecaoTitulo: {
+      fontSize: 15,
+      fontWeight: 'bold',
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      backgroundColor: '#fafafa',
+      borderBottomWidth: 1,
+      borderBottomColor: '#ddd',
+  },
+
   // botões
   botaoEditar: {
     backgroundColor: '#e8f0fe',
@@ -249,6 +284,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fde8e8',
     borderRadius: 6,
     padding: 4,
+  },
+  botaoVisualizar: {
+    backgroundColor: '#e8feea',
+    borderRadius: 6,
+    padding: 4,
+  },
+  textoBotaoVisualizar: {
+      fontSize: 14,
   },
   textoBotaoEditar: {
     fontSize: 14,
