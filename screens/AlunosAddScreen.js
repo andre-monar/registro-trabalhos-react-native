@@ -30,6 +30,7 @@ export default function AlunosAddScreen( { navigation, route } ) {
     }
     return (
         <View style = {styles.container}>
+            <Text style={styles.texto}>Nome:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Digite o nome"
@@ -37,6 +38,7 @@ export default function AlunosAddScreen( { navigation, route } ) {
                 onChangeText={setNome}
             />
 
+            <Text style={styles.texto}>RA:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Digite o RA"

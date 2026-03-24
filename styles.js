@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderBottomWidth: 2,
     borderBottomColor: '#007AFF',
-    minWidth: 720,
+    minWidth: 850,
   },
   tbLinhaTrabalho: {
     flexDirection: 'row',
@@ -180,6 +180,10 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
   },
+  celulaTrabalhoHoras: {
+    width: 65,
+    fontSize: 12,
+  },
 
   // atividade
   tbCabecalhoAtividade: {
@@ -198,8 +202,16 @@ const styles = StyleSheet.create({
       minWidth: 780,
       alignItems: 'center',
   },
+  celulaAtividadeIdTrabalho: {
+      width: 30,
+      fontSize: 13,
+  },
+  celulaAtividadeNomeTrabalho: {
+      width: 70,
+      fontSize: 13,
+  },
   celulaAtividadeTrabalho: {
-      width: 55,
+      width: 100,
       fontSize: 13,
   },
   celulaAtividadeNome: {
@@ -218,6 +230,13 @@ const styles = StyleSheet.create({
   celulaAtividadeSituacao: {
       width: 90,
       fontSize: 12,
+  },
+
+  containerScroll: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    paddingBottom: 40,
+    justifyContent: 'center',
   },
 
   // botões

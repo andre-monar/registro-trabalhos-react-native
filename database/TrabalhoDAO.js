@@ -17,7 +17,15 @@ class TrabalhoDAO {
     async getAll() {
         try {
             const db = await getDbConnection();
-            const result = await db.getAllAsync('SELECT * FROM tbTrabalho ORDER BY id');
+            const result = await db.getAllAsync(
+                `SELECT tbTrabalho.*,
+                    COALESCE(SUM(tbAtividade.horas_previstas), 0) AS total_previstas,
+                    COALESCE(SUM(tbAtividade.horas_concluidas), 0) AS total_concluidas
+                FROM tbTrabalho
+                LEFT JOIN tbAtividade ON tbAtividade.idTrabalho = tbTrabalho.id
+                GROUP BY tbTrabalho.id
+                ORDER BY tbTrabalho.id`
+            );
             return result || [];
         } catch (erro) {
             console.log('Erro getAll:', erro);
@@ -57,6 +65,8 @@ class TrabalhoDAO {
             throw erro;
         }
     }
+
+    
 }
 
 export default new TrabalhoDAO();

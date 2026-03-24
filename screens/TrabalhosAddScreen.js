@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Alert, FlatList, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, FlatList, Modal, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../styles';
 import { useState } from 'react';
@@ -110,7 +110,9 @@ export default function TrabalhosAddScreen({ navigation, route }) {
     );
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.containerScroll}>
+
+            <Text style={styles.texto}>Nome:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Nome do trabalho"
@@ -118,6 +120,7 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                 onChangeText={setNome}
             />
 
+            <Text style={styles.texto}>Descrição:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Descrição"
@@ -125,6 +128,7 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                 onChangeText={setDescricao}
             />
 
+            <Text style={styles.texto}>Data de entrega (AAAA-MM-DD):</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Data de entrega (AAAA-MM-DD)"
@@ -132,6 +136,7 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                 onChangeText={setDataEntrega}
             />
 
+            <Text style={styles.texto}>Situação:</Text>
             <View style={styles.picker}>
                 <Picker selectedValue={situacao} onValueChange={(value) => setSituacao(value)}>
                     <Picker.Item label="Pendente" value="Pendente" />
@@ -199,6 +204,6 @@ export default function TrabalhosAddScreen({ navigation, route }) {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </ScrollView>
     );
 }

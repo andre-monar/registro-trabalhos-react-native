@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Alert, FlatList, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, FlatList, Modal, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../styles';
 import { useState } from 'react';
@@ -39,6 +39,25 @@ export default function AtividadesAddScreen({ navigation, route }) {
     const carregarAlunosVinculados = async (idAtividade) => {
         const lista = await AtividadeAlunoDAO.getByAtividade(idAtividade);
         setAlunosVinculados(lista);
+    };
+
+    // Atuação inteligente entre horas concluídas:pendentes
+    const handleHorasConcluidas = (text) => {
+        const valor = text.replace(/[^0-9.]/g, '');
+        const previstas = parseFloat(horasPrevistas) || 0;
+        const concluidas = parseFloat(valor) || 0;
+
+        if (previstas > 0 && concluidas > previstas) {
+            Alert.alert('Atenção', `Horas concluídas não podem ser maiores que as previstas (${previstas}h).`, [{ text: 'OK' }]);
+            return;
+        }
+
+        setHorasConcluidas(valor);
+
+        // muda situação automaticamente se igual
+        if (previstas > 0 && concluidas === previstas) {
+            setSituacao('Concluído');
+        }
     };
 
     const abrirModal = async () => {
@@ -134,8 +153,9 @@ export default function AtividadesAddScreen({ navigation, route }) {
     );
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.containerScroll}>
             {/* picker de trabalho */}
+            <Text style={styles.texto}>Trabalho:</Text>
             <View style={styles.picker}>
                 <Picker
                     selectedValue={idTrabalho}
@@ -147,6 +167,7 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 </Picker>
             </View>
 
+            <Text style={styles.texto}>Nome:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Nome da atividade"
@@ -154,6 +175,7 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 onChangeText={setNome}
             />
 
+            <Text style={styles.texto}>Descrição:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Descrição"
@@ -161,22 +183,34 @@ export default function AtividadesAddScreen({ navigation, route }) {
                 onChangeText={setDescricao}
             />
 
+            <Text style={styles.texto}>Horas previstas:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Horas previstas"
                 value={horasPrevistas}
-                onChangeText={setHorasPrevistas}
+                onChangeText={(text) => {
+                    const valor = text.replace(/[^0-9.]/g, '');
+                    setHorasPrevistas(valor);
+                    // revalida horas concluidas se já preenchido
+                    const previstas = parseFloat(valor) || 0;
+                    const concluidas = parseFloat(horasConcluidas) || 0;
+                    if (previstas > 0 && concluidas > previstas) {
+                        setHorasConcluidas(String(previstas));
+                    }
+                }}
                 keyboardType='numeric'
             />
 
+            <Text style={styles.texto}>Horas concluídas:</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Horas concluídas"
                 value={horasConcluidas}
-                onChangeText={setHorasConcluidas}
+                onChangeText={handleHorasConcluidas}
                 keyboardType='numeric'
             />
 
+            <Text style={styles.texto}>Situação:</Text>
             {/* picker de situação */}
             <View style={styles.picker}>
                 <Picker selectedValue={situacao} onValueChange={(value) => setSituacao(value)}>
@@ -185,6 +219,7 @@ export default function AtividadesAddScreen({ navigation, route }) {
                     <Picker.Item label="Cancelado" value="Cancelado" />
                 </Picker>
             </View>
+
 
             {/* seção de alunos — só no modo edição */}
             {editando && (
@@ -245,6 +280,6 @@ export default function AtividadesAddScreen({ navigation, route }) {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </ScrollView>
     );
 }

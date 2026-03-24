@@ -34,6 +34,8 @@ export default function TrabalhosScreen({ navigation }) {
             <Text style={styles.celulaTrabalhoDesc}>{item.descricao}</Text>
             <Text style={styles.celulaTrabalhoData}>{item.data_entrega}</Text>
             <Text style={styles.celulaTrabalhoSituacao}>{item.situacao}</Text>
+            <Text style={styles.celulaTrabalhoHoras}>{item.total_previstas}h</Text>
+            <Text style={styles.celulaTrabalhoHoras}>{item.total_concluidas}h</Text>
             <View style={styles.celulaTrabalhoAcoes}>
                 <TouchableOpacity
                     style={styles.botaoEditar}
@@ -68,7 +70,9 @@ export default function TrabalhosScreen({ navigation }) {
                         <Text style={styles.celulaTrabalhoDesc}>DESCRIÇÃO</Text>
                         <Text style={styles.celulaTrabalhoData}>ENTREGA</Text>
                         <Text style={styles.celulaTrabalhoSituacao}>SITUAÇÃO</Text>
-                        <Text style={styles.celulaAcoes}>AÇÕES</Text>
+                        <Text style={styles.celulaTrabalhoHoras}>H.PREV</Text>
+                        <Text style={styles.celulaTrabalhoHoras}>H.CONC</Text>
+                        <Text style={styles.celulaTrabalhoAcoes}>AÇÕES</Text>
                     </View>
 
                     <FlatList

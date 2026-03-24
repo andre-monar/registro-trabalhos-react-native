@@ -29,8 +29,9 @@ export default function AtividadesScreen({ navigation }) {
 
     const renderItem = ({ item }) => (
         <View style={styles.tbLinhaAtividade}>
+            <Text style={styles.celulaAtividadeIdTrabalho}>{item.idTrabalho}</Text>
+            <Text style={styles.celulaAtividadeNomeTrabalho}>{item.nomeTrabalho}</Text>
             <Text style={styles.celulaId}>{item.id}</Text>
-            <Text style={styles.celulaAtividadeTrabalho}>{item.idTrabalho}</Text>
             <Text style={styles.celulaAtividadeNome}>{item.nome}</Text>
             <Text style={styles.celulaAtividadeDesc}>{item.descricao}</Text>
             <Text style={styles.celulaAtividadeHoras}>{item.horas_previstas}h</Text>
@@ -65,8 +66,8 @@ export default function AtividadesScreen({ navigation }) {
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ width: '100%' }}>
                 <View>
                     <View style={styles.tbCabecalhoAtividade}>
+                        <Text style={styles.celulaAtividadeTrabalho}>TRABALHO</Text>
                         <Text style={styles.celulaId}>ID</Text>
-                        <Text style={styles.celulaAtividadeTrabalho}>TRAB.</Text>
                         <Text style={styles.celulaAtividadeNome}>NOME</Text>
                         <Text style={styles.celulaAtividadeDesc}>DESCRIÇÃO</Text>
                         <Text style={styles.celulaAtividadeHoras}>H.PREV</Text>

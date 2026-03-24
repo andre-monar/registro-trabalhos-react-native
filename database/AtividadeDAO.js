@@ -17,14 +17,19 @@ class AtividadeDAO {
     async getAll() {
         try {
             const db = await getDbConnection();
-            const result = await db.getAllAsync('SELECT * FROM tbAtividade ORDER BY id');
+            const result = await db.getAllAsync(
+                `SELECT tbAtividade.*, tbTrabalho.nome AS nomeTrabalho 
+                FROM tbAtividade 
+                LEFT JOIN tbTrabalho ON tbAtividade.idTrabalho = tbTrabalho.id
+                ORDER BY tbAtividade.id`
+            );
             return result || [];
         } catch (erro) {
             console.log('Erro getAll:', erro);
             return [];
         }
     }
-
+    
     async getById(id) {
         try {
             const db = await getDbConnection();
